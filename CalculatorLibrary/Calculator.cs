@@ -1,68 +1,49 @@
-﻿using Newtonsoft.Json;
+﻿using CalculatorLibrary.enums;
 
 namespace CalculatorLibrary;
 
 public class Calculator
 {
-  JsonWriter _writer;
+  public Operations Operation { get; set; }
 
-  public Calculator()
+  public Calculator() { }
+
+  public double Calculate(double num1, double num2)
   {
-    StreamWriter logFile = File.CreateText("calculatorlog.json");
-    logFile.AutoFlush = true;
-    _writer = new JsonTextWriter(logFile);
-    _writer.Formatting = Formatting.Indented;
-    _writer.WriteStartObject();
-    _writer.WritePropertyName("Operations");
-    _writer.WriteStartArray();
-  }
+    double result = double.NaN;
 
-  public double DoOperation(double num1, double num2, string op)
-  {
-    double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
-    _writer.WriteStartObject();
-    _writer.WritePropertyName("Operand1");
-    _writer.WriteValue(num1);
-    _writer.WritePropertyName("Operand2");
-    _writer.WriteValue(num2);
-    _writer.WritePropertyName("Operation");
-
-    switch (op)
+    switch (Operation)
     {
-      case "a":
+      case Operations.Add:
         result = num1 + num2;
-        _writer.WriteValue("Add");
         break;
-      case "s":
+      case Operations.Subtract:
         result = num1 - num2;
-        _writer.WriteValue("Subtract");
         break;
-      case "m":
+      case Operations.Multiply:
         result = num1 * num2;
-        _writer.WriteValue("Multiply");
         break;
-      case "d":
-        if (num2 != 0)
+      case Operations.Divide:
         {
+          while (num2 == 0)
+          {
+            Console.WriteLine("Please enter non-zero number.");
+            num2 = Convert.ToDouble(Console.ReadLine());
+          }
           result = num1 / num2;
-          _writer.WriteValue("Divide");
-        }
-        break;
-      default:
-        break;
+          break;
+        };
     }
-
-    _writer.WritePropertyName("Result");
-    _writer.WriteValue(result);
-    _writer.WriteEndObject();
-
     return result;
   }
 
-  public void Finish()
+  public double Square(double num)
   {
-    _writer.WriteEndArray();
-    _writer.WriteEndObject();
-    _writer.Close();
+    return Math.Sqrt(num);
+  }
+
+  public double Power(double num, double pow)
+  {
+    return Math.Pow(num, pow);
   }
 }
