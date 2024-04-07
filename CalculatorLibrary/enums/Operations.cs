@@ -1,7 +1,6 @@
-﻿namespace CalculatorLibrary.enums
+﻿namespace CalculatorLibrary.enums;
+
+public enum Operations
 {
-  public enum Operations
-  {
-    Add, Subtract, Multiply, Divide, Square, Power
-  }
+  Add, Subtract, Multiply, Divide, Square, Power
 }
